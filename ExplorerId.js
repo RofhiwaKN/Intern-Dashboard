@@ -4,6 +4,7 @@ const config = {
   scriptURL:
     "https://script.google.com/macros/s/AKfycby_kRlp12-OMQVx8TbdA29CCBqW_rDahCWplQDVNVCVi_vkgHLUPrBYE3V02KIfNco3/exec",
   minTimeBetweenRequests: 1000,
+  dashboardURL: "./pathway-chacker/pathwayChecker.html",
 };
 
 const elements = {
@@ -13,7 +14,7 @@ const elements = {
   submitButton: document.getElementById("fetchID"),
   resultDiv: document.getElementById("result"),
   spinner: document.getElementById("loadingSpinner"),
- searchSection: document.getElementById("searchSection"),
+  searchSection: document.getElementById("searchSection"),
 };
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -157,66 +158,6 @@ function sanitizeHtml(text) {
   return sanitizerTemplate.innerHTML;
 }
 
-function copyToClipboard(text, buttonElement) {
-  navigator.clipboard.writeText(text).then(function() {
-    // Success feedback
-    const originalText = buttonElement.textContent || buttonElement.innerHTML;
-    const isButton = buttonElement.tagName === 'BUTTON';
-    
-    if (isButton) {
-      buttonElement.textContent = "Copied!";
-      buttonElement.classList.add("copied");
-    } else {
-      buttonElement.innerHTML = "✅";
-      buttonElement.title = "Copied!";
-    }
-    
-    setTimeout(() => {
-      if (isButton) {
-        buttonElement.textContent = originalText;
-        buttonElement.classList.remove("copied");
-      } else {
-        buttonElement.innerHTML = "📋";
-        buttonElement.title = "Copy to clipboard";
-      }
-    }, 2000);
-  }).catch(function(err) {
-    console.error('Failed to copy text: ', err);
-    // Fallback for older browsers
-    const textArea = document.createElement('textarea');
-    textArea.value = text;
-    document.body.appendChild(textArea);
-    textArea.select();
-    try {
-      document.execCommand('copy');
-      // Same success feedback as above
-      const originalText = buttonElement.textContent || buttonElement.innerHTML;
-      const isButton = buttonElement.tagName === 'BUTTON';
-      
-      if (isButton) {
-        buttonElement.textContent = "Copied!";
-        buttonElement.classList.add("copied");
-      } else {
-        buttonElement.innerHTML = "✅";
-        buttonElement.title = "Copied!";
-      }
-      
-      setTimeout(() => {
-        if (isButton) {
-          buttonElement.textContent = originalText;
-          buttonElement.classList.remove("copied");
-        } else {
-          buttonElement.innerHTML = "📋";
-          buttonElement.title = "Copy to clipboard";
-        }
-      }, 2000);
-    } catch (err) {
-      console.error('Fallback copy failed: ', err);
-    }
-    document.body.removeChild(textArea);
-  });
-}
-
 function showError(message, showAlternative = false) {
   const errorHtml = `<p class='error'>${sanitizeHtml(message)}</p>`;
   const alternativeHtml = showAlternative
@@ -224,13 +165,8 @@ function showError(message, showAlternative = false) {
        No ID found for this email. Please use the email you registered with Nobel.
        </div>`
     : "";
-   elements.searchSection.classList.remove("hidden");
-<<<<<<< HEAD
-  elements.resultDiv.innerHTML = errorHtml + alternativeHtml;
-=======
-  elements.resultDiv.innerHTML =alternativeHtml;
->>>>>>> 3ae3cff7518d112bb3a7e6f95f08a99dc7a2d3c1
- 
+  elements.searchSection.classList.remove("hidden");
+  elements.resultDiv.innerHTML = alternativeHtml;
 }
 
 function displayIds(ids) {
@@ -239,10 +175,6 @@ function displayIds(ids) {
   const resultCard = document.createElement("div");
   resultCard.className = "id-result-card";
   elements.searchSection.classList.add("hidden");
-<<<<<<< HEAD
-=======
-  
->>>>>>> 3ae3cff7518d112bb3a7e6f95f08a99dc7a2d3c1
   if (ids.length === 1) {
     // For single ID, display it directly in the success message
     const successMsg = document.createElement("p");
@@ -250,7 +182,6 @@ function displayIds(ids) {
     successMsg.innerHTML = `Your Explorer ID: <span class="id-highlight">${ids[0]}</span>`;
     resultCard.appendChild(successMsg);
 
-<<<<<<< HEAD
     const idActions = document.createElement("div");
     idActions.className = "id-actions";
 
@@ -267,16 +198,15 @@ function displayIds(ids) {
       )}`;
     });
     // Add back button
-  const backButton = document.createElement("button");
-  backButton.className = "back-button";
-  backButton.textContent = "Back to Search";
-  backButton.addEventListener("click", function() {
-    elements.searchSection.classList.remove("hidden");
-    elements.resultDiv.innerHTML = "";
-  });
-  
-  // Add it to your result card
- 
+    const backButton = document.createElement("button");
+    backButton.className = "back-button";
+    backButton.textContent = "Back to Search";
+    backButton.addEventListener("click", function () {
+      elements.searchSection.classList.remove("hidden");
+      elements.resultDiv.innerHTML = "";
+    });
+
+    // Add it to your result card
 
     idActions.appendChild(dashboardButton);
     resultCard.appendChild(idActions);
@@ -288,40 +218,6 @@ function displayIds(ids) {
     successMsg.textContent = `Here are your Explorer IDs:`;
     resultCard.appendChild(successMsg);
 
-=======
-    // Add copy button
-    const copyButton = document.createElement("button");
-    copyButton.className = "copy-button";
-    copyButton.textContent = "Copy ID";
-    copyButton.addEventListener("click", function() {
-      copyToClipboard(ids[0], this);
-    });
-    
-    // Add coming soon message
-    const comingSoonMsg = document.createElement("p");
-    comingSoonMsg.className = "coming-soon";
-    comingSoonMsg.textContent = "The course dashboard is under maintenance and will be unavailable for a few weeks. Thanks for your patience!";
-    
-    // Add back button
-    const backButton = document.createElement("button");
-    backButton.className = "back-button";
-    backButton.textContent = "Back to Search";
-    backButton.addEventListener("click", function() {
-      elements.searchSection.classList.remove("hidden");
-      elements.resultDiv.innerHTML = "";
-    });
-    
-    resultCard.appendChild(copyButton);
-    resultCard.appendChild(comingSoonMsg);
-    resultCard.appendChild(backButton);
-  } else {
-    // For multiple IDs, keep the selection interface
-    const successMsg = document.createElement("p");
-    successMsg.className = "success";
-    successMsg.textContent = `Here are your Explorer IDs:`;
-    resultCard.appendChild(successMsg);
-
->>>>>>> 3ae3cff7518d112bb3a7e6f95f08a99dc7a2d3c1
     ids.forEach((id) => {
       const idContainer = document.createElement("div");
       idContainer.className = "id-container";
@@ -331,7 +227,6 @@ function displayIds(ids) {
       idDiv.textContent = id;
       idDiv.dataset.id = id;
 
-<<<<<<< HEAD
       const arrowIcon = document.createElement("span");
       arrowIcon.className = "arrow-icon";
       arrowIcon.innerHTML = "&rarr;";
@@ -359,58 +254,17 @@ function displayIds(ids) {
 
     idActions.appendChild(dashboardButton);
     resultCard.appendChild(idActions);
-=======
-      const copyIcon = document.createElement("span");
-      copyIcon.className = "copy-icon";
-      copyIcon.innerHTML = "📋";
-      copyIcon.title = "Copy to clipboard";
-      copyIcon.addEventListener("click", function(e) {
-        e.stopPropagation();
-        copyToClipboard(id, this);
-      });
-
-      idContainer.appendChild(idDiv);
-      idContainer.appendChild(copyIcon);
-      resultCard.appendChild(idContainer);
-    });
-
-    // Add coming soon message
-    const comingSoonMsg = document.createElement("p");
-    comingSoonMsg.className = "coming-soon";
-    comingSoonMsg.textContent = "Course Dashboard coming soon!";
-    
-    // Add back button for multiple IDs case
-    const backButton = document.createElement("button");
-    backButton.className = "back-button";
-    backButton.textContent = "Back to Search";
-    backButton.addEventListener("click", function() {
-      elements.searchSection.classList.remove("hidden");
-      elements.resultDiv.innerHTML = "";
-    });
-    
-    resultCard.appendChild(comingSoonMsg);
-    resultCard.appendChild(backButton);
->>>>>>> 3ae3cff7518d112bb3a7e6f95f08a99dc7a2d3c1
   }
 
   elements.resultDiv.innerHTML = "";
   elements.resultDiv.appendChild(resultCard);
-<<<<<<< HEAD
-
-=======
->>>>>>> 3ae3cff7518d112bb3a7e6f95f08a99dc7a2d3c1
 
   document.querySelectorAll(".clickable-id").forEach((element) => {
     element.addEventListener("click", function () {
       const explorerId = this.dataset.id;
 
-<<<<<<< HEAD
-  
       document.querySelector(".dashboard-button").dataset.id = explorerId;
 
-  
-=======
->>>>>>> 3ae3cff7518d112bb3a7e6f95f08a99dc7a2d3c1
       document.querySelectorAll(".clickable-id").forEach((el) => {
         el.classList.remove("clicked");
       });

@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Course Facilitation Signup</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Raleway", sans-serif;
+        background: linear-gradient(135deg, #f0f4f0, #e6f3e0, #f4f9e6);
+        color: #2c3e50;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        padding: 20px;
+        text-align: center;
+      }
+
+      .container {
+        background: rgba(255, 255, 255, 0.95);
+        padding: 35px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        max-width: 600px;
+        width: 100%;
+        border: 2px solid #d4edda;
+        transition: all 0.3s ease;
+      }
+
+      .header {
+        margin-bottom: 30px;
+      }
+
+      h2 {
+        margin-bottom: 12px;
+        font-size: 2rem;
+        color: #2c7a2c;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+      }
+
+      .subtitle {
+        margin-bottom: 15px;
+        font-size: 1rem;
+        color: #495057;
+        opacity: 0.9;
+      }
+
+      .form-step {
+        display: none;
+        animation: fadeIn 0.3s ease;
+      }
+
+      .form-step.active {
+        display: block;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .input-group {
+        margin-bottom: 20px;
+        position: relative;
+        text-align: left;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #2c3e50;
+        font-size: 0.95rem;
+      }
+
+      input,
+      select {
+        background: #f8fff8;
+        color: #2c3e50;
+        font-weight: 500;
+        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+        border: 1px solid #b8dab8;
+        height: 45px;
+        padding: 10px 15px;
+        font-size: 1rem;
+        border-radius: 8px;
+        width: 100%;
+        box-sizing: border-box;
+        font-family: "Raleway", sans-serif;
+        transition: all 0.3s ease;
+      }
+
+      input:focus,
+      select:focus {
+        outline: none;
+        border-color: #28a745;
+        box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.15);
+      }
+
+      button {
+        background: #28a745;
+        color: white;
+        cursor: pointer;
+        font-weight: 600;
+        letter-spacing: 0.6px;
+        border: none;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        margin: 10px auto;
+        height: 45px;
+        padding: 0 20px;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        font-family: "Raleway", sans-serif;
+      }
+
+      button:hover {
+        background: #2ecc71;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+      }
+
+      button:disabled {
+        background: #6c757d;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .secondary-button {
+        background: #6c757d;
+        margin-right: 10px;
+      }
+
+      .secondary-button:hover {
+        background: #5a6268;
+      }
+
+      .loading {
+        display: none;
+        margin: 15px auto;
+        border: 3px solid rgba(40, 167, 69, 0.3);
+        border-radius: 50%;
+        border-top: 3px solid #28a745;
+        width: 25px;
+        height: 25px;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      .error {
+        color: #721c24;
+        background: #f8d7da;
+        border: 1px solid #f5c6cb;
+        padding: 12px;
+        border-radius: 6px;
+        font-weight: 500;
+        margin: 10px 0;
+        font-size: 0.9rem;
+      }
+
+      .success {
+        color: #2c7a2c;
+        background: rgba(40, 167, 69, 0.05);
+        border: 1px solid #28a745;
+        padding: 12px;
+        border-radius: 6px;
+        font-weight: 500;
+        margin: 10px 0;
+        font-size: 0.9rem;
+      }
+
+      .explorer-id-display {
+        background: rgba(255, 193, 7, 0.2);
+        border: 1px solid #ffc107;
+        border-radius: 8px;
+        padding: 15px;
+        margin: 15px 0;
+        font-weight: 600;
+        color: #2c3e50;
+        text-align: center;
+        font-size: 1.1rem;
+      }
+
+      .course-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 15px;
+        margin: 20px 0;
+      }
+
+      .course-option {
+        background: #f8fff8;
+        border: 2px solid #d4edda;
+        border-radius: 8px;
+        padding: 15px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: left;
+      }
+
+      .course-option:hover {
+        border-color: #28a745;
+        background: rgba(40, 167, 69, 0.05);
+      }
+
+      .course-option.selected {
+        border-color: #28a745;
+        background: rgba(40, 167, 69, 0.1);
+      }
+
+      .course-title {
+        font-weight: 600;
+        color: #2c7a2c;
+        margin-bottom: 5px;
+      }
+
+      .course-date {
+        font-size: 0.9rem;
+        color: #495057;
+      }
+
+      .course-type {
+        font-size: 0.8rem;
+        color: #6c757d;
+        text-transform: uppercase;
+        font-weight: 500;
+        margin-bottom: 8px;
+      }
+
+      .course-category {
+        font-size: 0.85rem;
+        color: #28a745;
+        font-weight: 600;
+        margin-bottom: 5px;
+      }
+
+      .progress-bar {
+        background: #e9ecef;
+        height: 4px;
+        border-radius: 2px;
+        margin-bottom: 20px;
+        overflow: hidden;
+      }
+
+      .progress-fill {
+        background: #28a745;
+        height: 100%;
+        transition: width 0.3s ease;
+      }
+
+      .step-indicator {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+        gap: 10px;
+      }
+
+      .step-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #e9ecef;
+        transition: background 0.3s ease;
+      }
+
+      .step-dot.active {
+        background: #28a745;
+      }
+
+      .step-dot.completed {
+        background: #2ecc71;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h2>Interested in continuing your journey?</h2>
+        <p class="subtitle">
+          If you want to continue your journey in Nobel Fundamentals, fill out
+          this form and we will get you back in as soon as possible!
+        </p>
+      </div>
+
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+
+      <div class="step-indicator">
+        <div class="step-dot active" id="step1Dot"></div>
+        <div class="step-dot" id="step2Dot"></div>
+        <div class="step-dot" id="step3Dot"></div>
+        <div class="step-dot" id="step4Dot"></div>
+        <div class="step-dot" id="step5Dot"></div>
+      </div>
+
+      <form id="signupForm">
+        <!-- Step 1: Email Input -->
+        <div class="form-step active" id="step1">
+          <div class="input-group">
+            <label for="email">Email Address</label>
+            <input
+              type="email"
+              id="email"
+              required
+              placeholder="Enter your email address"
+            />
+            <div class="error" id="emailError" style="display: none"></div>
+          </div>
+          <button type="button" id="fetchIdBtn">
+            <span>Find Explorer ID</span>
+            <div class="loading" id="emailLoading"></div>
+          </button>
+        </div>
+
+        <!-- Step 2: Explorer ID & Name -->
+        <div class="form-step" id="step2">
+          <div
+            class="explorer-id-display"
+            id="explorerIdDisplay"
+            style="display: none"
+          >
+            Your Explorer ID: <span id="explorerIdValue"></span>
+          </div>
+          <div class="input-group">
+            <label for="fullName">Full Name</label>
+            <input
+              type="text"
+              id="fullName"
+              required
+              placeholder="Enter your full name"
+            />
+          </div>
+          <div style="display: flex; justify-content: center; gap: 10px">
+            <button
+              type="button"
+              class="secondary-button"
+              onclick="goToStep(1)"
+            >
+              Back
+            </button>
+            <button type="button" onclick="goToStep(3)">Continue</button>
+          </div>
+        </div>
+
+        <!-- Step 3: Course Category -->
+        <div class="form-step" id="step3">
+          <div class="input-group">
+            <label for="courseCategory">Course Category</label>
+            <select id="courseCategory" required>
+              <option value="">Select course category</option>
+              <option value="intro">Intro Course</option>
+              <option value="leadership">Leadership</option>
+              <option value="leadership-bit">Leadership Practice BIT</option>
+              <option value="leadership-pit">Leadership Practice PIT</option>
+              <option value="leadership-iwd">Leadership Practice IWD</option>
+            </select>
+          </div>
+          <div style="display: flex; justify-content: center; gap: 10px">
+            <button
+              type="button"
+              class="secondary-button"
+              onclick="goToStep(2)"
+            >
+              Back
+            </button>
+            <button type="button" onclick="goToStep(4)">Continue</button>
+          </div>
+        </div>
+
+        <!-- Step 4: Schedule Preference -->
+        <div class="form-step" id="step4">
+          <div class="input-group">
+            <label for="scheduleType">Preferred Schedule</label>
+            <select id="scheduleType" required>
+              <option value="">Select schedule preference</option>
+              <option value="weekend">Weekend</option>
+              <option value="weekday">Weekday</option>
+            </select>
+          </div>
+          <div style="display: flex; justify-content: center; gap: 10px">
+            <button
+              type="button"
+              class="secondary-button"
+              onclick="goToStep(3)"
+            >
+              Back
+            </button>
+            <button type="button" id="loadCoursesBtn">
+              <span>Load Courses</span>
+              <div class="loading" id="coursesLoading"></div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 5: Course Selection -->
+        <div class="form-step" id="step5">
+          <div class="input-group">
+            <label>Available Courses</label>
+            <div id="coursesContainer">
+              <!-- Courses will be loaded here -->
+            </div>
+            <div class="error" id="coursesError" style="display: none"></div>
+          </div>
+          <div style="display: flex; justify-content: center; gap: 10px">
+            <button
+              type="button"
+              class="secondary-button"
+              onclick="goToStep(4)"
+            >
+              Back
+            </button>
+            <button type="submit" id="submitBtn">
+              <span>Complete Signup</span>
+              <div class="loading" id="submitLoading"></div>
+            </button>
+          </div>
+        </div>
+      </form>
+
+      <div id="result" style="margin-top: 20px"></div>
+    </div>
+
+    <script>
+      const config = {
+        idLookupURL:
+          "https://script.google.com/macros/s/AKfycby_kRlp12-OMQVx8TbdA29CCBqW_rDahCWplQDVNVCVi_vkgHLUPrBYE3V02KIfNco3/exec",
+        coursesURL:
+          "https://script.google.com/macros/s/AKfycbxHaMcMifIDYdHuSwThaRN13TanP_NxmMBv4p3lDt1YfYDdqoXjjgkA8o6Ti0nySEK6hg/exec",
+        signupURL:
+          "https://script.google.com/macros/s/AKfycbyMlPJ-CxDpPTjC4xwtV4IbhUy2kIJAfd_QoC_rpde44H-3mbmHfV1ZtxkR6MUHeZ2K/exec",
+      };
+
+      let currentStep = 1;
+      let selectedCourse = null;
+      let explorerIdFound = false;
+      let foundExplorerId = "";
+
+      // Step navigation
+      function goToStep(step) {
+        document.querySelector(".form-step.active").classList.remove("active");
+        document.getElementById(`step${step}`).classList.add("active");
+        updateProgress(step);
+        currentStep = step;
+      }
+
+      function updateProgress(step) {
+        const progressFill = document.getElementById("progressFill");
+        const progressPercentage = (step - 1) * 25;
+        progressFill.style.width = `${progressPercentage}%`;
+
+        // Update step indicators
+        for (let i = 1; i <= 5; i++) {
+          const dot = document.getElementById(`step${i}Dot`);
+          dot.classList.remove("active", "completed");
+
+          if (i < step) {
+            dot.classList.add("completed");
+          } else if (i === step) {
+            dot.classList.add("active");
+          }
+        }
+      }
+
+      document
+        .getElementById("fetchIdBtn")
+        .addEventListener("click", async function () {
+          const email = document.getElementById("email").value.trim();
+          const emailError = document.getElementById("emailError");
+          const loading = document.getElementById("emailLoading");
+
+          if (!email) {
+            showError("emailError", "Please enter an email address");
+            return;
+          }
+
+          if (!isValidEmail(email)) {
+            showError("emailError", "Please enter a valid email address");
+            return;
+          }
+
+          this.disabled = true;
+          loading.style.display = "inline-block";
+          hideError("emailError");
+
+          try {
+            const response = await fetch(
+              `${config.idLookupURL}?email=${encodeURIComponent(email)}`
+            );
+            const result = await response.json();
+
+            if (
+              Array.isArray(result) &&
+              result.length > 0 &&
+              result[0] !== "not_found"
+            ) {
+              // Take only the first Explorer ID
+              foundExplorerId = result[0];
+              document.getElementById("explorerIdValue").textContent =
+                foundExplorerId;
+              document.getElementById("explorerIdDisplay").style.display =
+                "block";
+              explorerIdFound = true;
+              goToStep(2);
+            } else {
+              showError(
+                "emailError",
+                "No Explorer ID found for this email. Please use the email you registered with."
+              );
+            }
+          } catch (error) {
+            showError(
+              "emailError",
+              "Error looking up Explorer ID. Please try again."
+            );
+          } finally {
+            this.disabled = false;
+            loading.style.display = "none";
+          }
+        });
+
+      // Load courses based on schedule preference and course category
+      document
+        .getElementById("loadCoursesBtn")
+        .addEventListener("click", async function () {
+          const scheduleType = document.getElementById("scheduleType").value;
+          const courseCategory =
+            document.getElementById("courseCategory").value;
+          const loading = document.getElementById("coursesLoading");
+
+          if (!scheduleType) {
+            showError("coursesError", "Please select a schedule preference");
+            return;
+          }
+
+          if (!courseCategory) {
+            showError("coursesError", "Please select a course category");
+            return;
+          }
+
+          this.disabled = true;
+          loading.style.display = "inline-block";
+          hideError("coursesError");
+
+          try {
+            const requestUrl = `${config.coursesURL}?type=${scheduleType}&category=${courseCategory}`;
+            console.log("Requesting:", requestUrl);
+
+            const response = await fetch(requestUrl);
+
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const result = await response.json();
+            console.log("API Response:", result);
+
+            let courses = [];
+
+            // Handle the response format from your Google Apps Script
+            if (
+              result.success &&
+              result.courses &&
+              Array.isArray(result.courses)
+            ) {
+              courses = result.courses;
+            } else if (Array.isArray(result)) {
+              courses = result;
+            } else {
+              console.error("Unexpected response format:", result);
+              throw new Error("Unexpected response format from server");
+            }
+
+            if (courses && courses.length > 0) {
+              displayCourses(courses);
+              goToStep(5);
+            } else {
+              showError(
+                "coursesError",
+                `No courses available for ${scheduleType} schedule in category "${courseCategory}"`
+              );
+            }
+          } catch (error) {
+            console.error("Error loading courses:", error);
+            showError(
+              "coursesError",
+              `Error loading courses: ${error.message}. Please try again.`
+            );
+          } finally {
+            this.disabled = false;
+            loading.style.display = "none";
+          }
+        });
+
+      function displayCourses(courses) {
+        const container = document.getElementById("coursesContainer");
+        container.innerHTML = "";
+
+        if (!Array.isArray(courses) || courses.length === 0) {
+          container.innerHTML =
+            '<p style="color: #6c757d; font-style: italic;">No courses available</p>';
+          return;
+        }
+
+        courses.forEach((course, index) => {
+          const courseElement = document.createElement("div");
+          courseElement.className = "course-option";
+          courseElement.dataset.courseId = course.id || `course_${index}`;
+
+          courseElement.innerHTML = `
+            <div class="course-category">${
+              course.category || "No Category"
+            }</div>
+            <div class="course-type">${course.type || "No Type"}</div>
+            <div class="course-title">${course.title || "No Title"}</div>
+            <div class="course-date">${course.date || "No Date"}</div>
+          `;
+
+          courseElement.addEventListener("click", function () {
+            // Remove selected class from all courses
+            document.querySelectorAll(".course-option").forEach((el) => {
+              el.classList.remove("selected");
+            });
+
+            // Add selected class to clicked course
+            this.classList.add("selected");
+            selectedCourse = course;
+            console.log("Selected course:", selectedCourse);
+          });
+
+          container.appendChild(courseElement);
+        });
+      }
+
+      document
+        .getElementById("signupForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          if (!selectedCourse) {
+            showError("coursesError", "Please select a course");
+            return;
+          }
+
+          const submitBtn = document.getElementById("submitBtn");
+          const loading = document.getElementById("submitLoading");
+          const resultDiv = document.getElementById("result");
+
+          submitBtn.disabled = true;
+          loading.style.display = "inline-block";
+
+          const formData = {
+            email: document.getElementById("email").value,
+            explorerId: foundExplorerId,
+            fullName: document.getElementById("fullName").value,
+            courseCategory: document.getElementById("courseCategory").value,
+            scheduleType: document.getElementById("scheduleType").value,
+            courseId: selectedCourse.id || "N/A",
+            courseTitle: selectedCourse.title,
+            courseDate: selectedCourse.date,
+            courseType: selectedCourse.type,
+            timestamp: new Date().toISOString(),
+          };
+
+          try {
+            const response = await fetch(config.signupURL, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(formData),
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+              resultDiv.innerHTML = `
+                <div class="success">
+                  <strong>Registration Successful!</strong><br>
+                  You have been registered for: <strong>${
+                    selectedCourse.title
+                  }</strong><br>
+                  Category: ${selectedCourse.category || "N/A"}<br>
+                  Date: ${selectedCourse.date}<br>
+                  Explorer ID: ${foundExplorerId}<br><br>
+                  A confirmation email will be sent to <strong>${
+                    formData.email
+                  }</strong> shortly.
+                </div>
+              `;
+              document.getElementById("signupForm").style.display = "none";
+            } else {
+              resultDiv.innerHTML = `
+                <div class="error">
+                  Registration failed: ${result.message || "Unknown error"}
+                </div>
+              `;
+            }
+          } catch (error) {
+            console.error("Submission error:", error);
+            resultDiv.innerHTML = `
+              <div class="error">
+                Error submitting registration. Please try again.
+              </div>
+            `;
+          } finally {
+            submitBtn.disabled = false;
+            loading.style.display = "none";
+          }
+        });
+
+      function isValidEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      }
+
+      function showError(elementId, message) {
+        const errorElement = document.getElementById(elementId);
+        errorElement.textContent = message;
+        errorElement.style.display = "block";
+      }
+
+      function hideError(elementId) {
+        document.getElementById(elementId).style.display = "none";
+      }
+
+      // Initialize
+      updateProgress(1);
+    </script>
+  </body>
+</html>
